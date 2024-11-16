@@ -1,4 +1,4 @@
-package com.issy.parser;
+package com.issy.compiler;
 
-public record TokenContext() {
+public record TokenContext(Token token, String value) {
 }
