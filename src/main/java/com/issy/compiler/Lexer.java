@@ -1,5 +1,9 @@
-package com.issy.parser;
+package com.issy.compiler;
 
 public class Lexer {
+
+  String parseStringLiteral(String input) {
+
+  }
 
 }
