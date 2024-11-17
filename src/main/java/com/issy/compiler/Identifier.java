@@ -7,6 +7,7 @@ import java.util.Optional;
 public enum Identifier {
   HAS_FILE_EXTENSION("hasFileExtension", true),
   IS_WITHIN_DIRECTORY("isWithinDirectory", true),
+  FILE_CONTAINS("fileContains", true),
   IS_IN_BASE_DIRECTORY("isInBaseDirectory", false);
 
   private final String name;
