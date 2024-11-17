@@ -14,7 +14,7 @@ public class Compiler {
     this.tokens = tokens;
   }
 
-  CompilerResult compile() {
+  public CompilerResult compile() {
     if (tokens.isEmpty()) {
       return CompilerResult.error(EMPTY_INPUT);
     }

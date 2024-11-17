@@ -70,6 +70,7 @@ public class Lexer {
     }
   }
 
+  /** Only visible for testing */
   public String collectUntil(Predicate<Integer> stop) {
     StringBuilder stringBuilder = new StringBuilder();
     stringBuilder.append(charAt(cursor.getValue()));

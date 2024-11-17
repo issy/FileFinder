@@ -1,14 +1,25 @@
 package com.issy;
 
-import org.apache.commons.cli.CommandLine;
-import org.apache.commons.cli.DefaultParser;
-import org.apache.commons.cli.Options;
-import org.apache.commons.cli.ParseException;
+import org.apache.commons.cli.*;
 
 import java.util.Optional;
 
 public class CommandArgsParser {
-  private static final Options options = new Options().addOption("f", "Input file to read from");
+  private static final Options options = new Options()
+      .addOption(Option.builder("f")
+          .longOpt("file")
+          .hasArg()
+          .argName("file-path")
+          .desc("Specify the input file path")
+          .build()
+      )
+      .addOption(Option.builder("d")
+          .longOpt("directory")
+          .hasArg()
+          .argName("directory")
+          .desc("The directory to scan within")
+          .build()
+      );
 
   private final DefaultParser parser;
 
@@ -18,9 +29,9 @@ public class CommandArgsParser {
 
   public InputArgs parse(String[] args) throws ParseException {
     CommandLine output = parser.parse(options, args);
-    return new InputArgs(output.getParsedOptionValue("f"));
+    Optional<String> fileValue = output.getParsedOptionValue("--file");
+    String directoryValue = output.getParsedOptionValue("--directory", "./");
+    return new InputArgs(fileValue, directoryValue);
   }
 
-  public record InputArgs(Optional<String> inputFilepath) {
-  }
 }
