@@ -16,3 +16,5 @@ This is a utility for writing, building and executing scripts for finding files 
   - [ ] Scan from base path
   - [ ] Ignore directories ahead of time
   - [ ] Concurrency
+- [ ] Compile to portable executable
+- [ ] Publish build artifact
