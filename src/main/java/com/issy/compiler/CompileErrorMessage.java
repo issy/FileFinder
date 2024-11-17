@@ -1,5 +1,6 @@
 package com.issy.compiler;
 
+// TODO: Create wrapper class that embeds position data for error message
 public enum CompileErrorMessage {
   EMPTY_INPUT("Empty input"),
   MUST_END_WITH_CLOSING_PAREN("Must end in closing parenthesis"),
