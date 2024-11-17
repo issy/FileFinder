@@ -2,6 +2,9 @@ package com.issy.compiler;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
+import static com.issy.compiler.Token.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -33,6 +36,19 @@ class LexerTest {
 
     // Then
     assertThat(collectedResult).isEqualTo("my");
+  }
+
+  @Test
+  void canLexBasicInput() {
+    // Given
+    String input = "hasFileExtension(\".js\") || hasFileExtension(\".ts\")";
+    Lexer lexer = new Lexer(input);
+
+    // When
+    List<TokenContext> tokens = lexer.parse();
+
+    // Then
+    assertThat(tokens).map(TokenContext::token).containsExactly(IDENTIFIER, OPEN_PAREN, STRING, CLOSE_PAREN, OR, IDENTIFIER, OPEN_PAREN, STRING, CLOSE_PAREN);
   }
 
 }
