@@ -6,13 +6,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.logging.Logger;
 
 import static com.issy.compiler.Token.*;
 
 public class Lexer {
-
-  private static final Logger logger = Logger.getLogger(Lexer.class.getName());
 
   private final String input;
   private final Cursor cursor;
@@ -25,10 +22,6 @@ public class Lexer {
   public List<TokenContext> parse() {
     final List<TokenContext> tokens = new ArrayList<>();
     while (cursor.getValue() < input.length()) {
-      if (cursor.getValue() == 50) {
-        logger.info(String.format("Hit final index %d", cursor.getValue()));
-      }
-      logger.info(String.format("Inspecting character at index %d", cursor.getValue()));
       String currentChar = charAt(cursor.getValue());
       if (currentChar.equals("\"")) {
         String munched = collectUntil(stringLiteralTerminationPredicate(cursor.getValue()));
@@ -44,9 +37,19 @@ public class Lexer {
         tokens.add(new TokenContext(NOT, "!"));
         cursor.increment();
       } else if (currentChar.equals("&")) {
-        tokens.add(new TokenContext(AND, collectUntil(andTerminationPredicate())));
+        if (charAt(cursor.increment()).equals("&")) {
+          tokens.add(new TokenContext(OR, "&&"));
+        } else {
+          throw new RuntimeException("Expected &&");
+        }
+        cursor.increment();
       } else if (currentChar.equals("|")) {
-        tokens.add(new TokenContext(OR, collectUntil(orTerminationPredication())));
+        if (charAt(cursor.increment()).equals("|")) {
+          tokens.add(new TokenContext(OR, "||"));
+        } else {
+          throw new RuntimeException("Expected ||");
+        }
+        cursor.increment();
       } else if (Character.isLetter(input.charAt(cursor.getValue()))) {
         tokens.add(new TokenContext(IDENTIFIER, collectUntil(identifierNameTerminationPredicate())));
       } else if (currentChar.equals(" ") || currentChar.equals("\n") || currentChar.equals("\t") || currentChar.equals("\r")) {
@@ -77,22 +80,8 @@ public class Lexer {
     return stringBuilder.toString();
   }
 
-  private Predicate<Integer> makeIntPredicate(Predicate<String> predicate) {
-    return index -> predicate.test(charAt(index));
-  }
-
   private Predicate<Integer> stringLiteralTerminationPredicate(int currentIndex) {
     return index -> index != currentIndex && charAt(index).equals("\"") && !charAt(index - 1).equals("\\");
-  }
-
-  private Predicate<Integer> andTerminationPredicate() {
-    int currentCursorValue = cursor.getValue();
-    return index -> index == currentCursorValue + 1 && charAt(index).equals("&");
-  }
-
-  private Predicate<Integer> orTerminationPredication() {
-    int currentCursorValue = cursor.getValue();
-    return index -> index == currentCursorValue + 1 && charAt(index).equals("|");
   }
 
   private Predicate<Integer> identifierNameTerminationPredicate() {
