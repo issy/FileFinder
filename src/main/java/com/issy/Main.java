@@ -1,17 +1,24 @@
 package com.issy;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-  public static void main(String[] args) {
-    //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-    // to see how IntelliJ IDEA suggests fixing it.
-    System.out.printf("Hello and welcome!");
+import org.apache.commons.cli.DefaultParser;
+import org.apache.commons.cli.Options;
+import org.apache.commons.cli.ParseException;
 
-    for (int i = 1; i <= 5; i++) {
-      //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-      // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-      System.out.println("i = " + i);
+import java.util.logging.Logger;
+
+public class Main {
+  private static final Logger logger = Logger.getLogger(Main.class.getName());
+
+  public static void main(String[] args) {
+    final Options options = new Options();
+    options.addOption("f", "Input file to read from");
+    final DefaultParser parser = new DefaultParser();
+    try {
+      var result = parser.parse(options, args);
+      logger.info(result.getOptionValue("f"));
+    } catch (ParseException e) {
+      logger.severe("Error parsing arguments: " + e.getMessage());
+      System.exit(1);
     }
   }
 }
