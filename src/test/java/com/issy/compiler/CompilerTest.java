@@ -12,14 +12,14 @@ class CompilerTest {
   void canCompile() {
     // Given
     final List<TokenContext> tokenContexts = List.of(
-        new TokenContext(Token.IDENTIFIER, Identifier.HAS_FILE_EXTENSION.getName()),
-        new TokenContext(Token.OPEN_PAREN, "("),
-        new TokenContext(Token.STRING, "\".tsx\""),
-        new TokenContext(Token.CLOSE_PAREN, ")"),
-        new TokenContext(Token.AND, "&&"),
-        new TokenContext(Token.IDENTIFIER, Identifier.IS_IN_BASE_DIRECTORY.getName()),
-        new TokenContext(Token.OPEN_PAREN, "("),
-        new TokenContext(Token.CLOSE_PAREN, ")")
+        new TokenContext(Token.IDENTIFIER, Identifier.HAS_FILE_EXTENSION.getName(), 0, 0),
+        new TokenContext(Token.OPEN_PAREN, "(", 0, 0),
+        new TokenContext(Token.STRING, "\".tsx\"", 0, 0),
+        new TokenContext(Token.CLOSE_PAREN, ")", 0, 0),
+        new TokenContext(Token.AND, "&&", 0, 0),
+        new TokenContext(Token.IDENTIFIER, Identifier.IS_IN_BASE_DIRECTORY.getName(), 0, 0),
+        new TokenContext(Token.OPEN_PAREN, "(", 0, 0),
+        new TokenContext(Token.CLOSE_PAREN, ")", 0, 0)
     );
     final Compiler compiler = new Compiler(tokenContexts);
 

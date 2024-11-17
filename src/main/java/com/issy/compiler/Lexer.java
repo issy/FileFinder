@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import static com.issy.compiler.Token.*;
 
@@ -22,36 +23,37 @@ public class Lexer {
   public List<TokenContext> parse() {
     final List<TokenContext> tokens = new ArrayList<>();
     while (cursor.getValue() < input.length()) {
-      String currentChar = charAt(cursor.getValue());
+      final Position position = positionAt(cursor.getValue());
+      final String currentChar = charAt(cursor.getValue());
       if (currentChar.equals("\"")) {
         String munched = collectUntil(stringLiteralTerminationPredicate(cursor.getValue()));
-        tokens.add(new TokenContext(STRING, parseStringLiteral(munched)));
+        tokens.add(TokenContext.withPosition(STRING, parseStringLiteral(munched), position));
         cursor.increment();
       } else if (currentChar.equals("(")) {
-        tokens.add(new TokenContext(OPEN_PAREN, "("));
+        tokens.add(TokenContext.withPosition(OPEN_PAREN, "(", position));
         cursor.increment();
       } else if (currentChar.equals(")")) {
-        tokens.add(new TokenContext(CLOSE_PAREN, ")"));
+        tokens.add(TokenContext.withPosition(CLOSE_PAREN, ")", position));
         cursor.increment();
       } else if (currentChar.equals("!")) {
-        tokens.add(new TokenContext(NOT, "!"));
+        tokens.add(TokenContext.withPosition(NOT, "!", position));
         cursor.increment();
       } else if (currentChar.equals("&")) {
         if (charAt(cursor.increment()).equals("&")) {
-          tokens.add(new TokenContext(OR, "&&"));
+          tokens.add(TokenContext.withPosition(OR, "&&", position));
         } else {
           throw new RuntimeException("Expected &&");
         }
         cursor.increment();
       } else if (currentChar.equals("|")) {
         if (charAt(cursor.increment()).equals("|")) {
-          tokens.add(new TokenContext(OR, "||"));
+          tokens.add(TokenContext.withPosition(OR, "||", position));
         } else {
           throw new RuntimeException("Expected ||");
         }
         cursor.increment();
       } else if (Character.isLetter(input.charAt(cursor.getValue()))) {
-        tokens.add(new TokenContext(IDENTIFIER, collectUntil(identifierNameTerminationPredicate())));
+        tokens.add(TokenContext.withPosition(IDENTIFIER, collectUntil(identifierNameTerminationPredicate()), position));
       } else if (currentChar.equals(" ") || currentChar.equals("\n") || currentChar.equals("\t") || currentChar.equals("\r")) {
         cursor.increment();
         continue;
@@ -93,6 +95,19 @@ public class Lexer {
     return String.valueOf(input.charAt(index));
   }
 
+  private Position positionAt(int index) {
+    List<String> lines = input.lines().toList();
+    int count = 0;
+    for (int i = 0; i < lines.size(); i++) {
+      String line = lines.get(i);
+      count += line.length();
+      if (count > index) {
+        return new Position(i + 1, index % count);
+      }
+    }
+    throw new IllegalArgumentException("Index exceeds string length");
+  }
+
   private static class Cursor {
 
     private int value;
@@ -124,6 +139,9 @@ public class Lexer {
     public boolean atLimit() {
       return value >= limit;
     }
+  }
+
+  public static record Position(Integer line, Integer column) {
   }
 
 }
