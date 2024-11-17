@@ -8,9 +8,9 @@ public enum Token {
   AND,
   OR,
   // Grammar
+  OPEN_PAREN,
   CLOSE_PAREN,
   STRING,
-  OPEN_PAREN,
   IDENTIFIER;
 
   public boolean nextTokenIsAllowed(final Token token) {
