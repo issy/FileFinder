@@ -32,7 +32,7 @@ class LexerTest {
     Lexer lexer = new Lexer(input);
 
     // When
-    String collectedResult = lexer.collectUntil((index) -> String.valueOf(input.charAt(index)).equals(" "));
+    String collectedResult = lexer.collectUntil((index) -> String.valueOf(input.charAt(index + 1)).equals(" "));
 
     // Then
     assertThat(collectedResult).isEqualTo("my");
