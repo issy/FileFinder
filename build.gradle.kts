@@ -12,6 +12,7 @@ repositories {
 dependencies {
     // Project dependencies
     implementation("com.fasterxml.jackson.core:jackson-databind:2.18.0")
+    implementation("commons-cli:commons-cli:1.9.0")
 
     // Test only
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
