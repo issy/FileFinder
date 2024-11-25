@@ -1,8 +1,6 @@
 package com.issy.compiler;
 
-@FunctionalInterface
-public interface FileMatcher {
+import java.util.function.Predicate;
 
-    boolean matches(String filepath);
-
+public interface FileMatcher extends Predicate<String> {
 }

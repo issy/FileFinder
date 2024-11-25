@@ -8,7 +8,8 @@ public enum CompileErrorMessage {
   TOKEN_NOT_ALLOWED("Token not allowed"),
   INVALID_FUNCTION_NAME("Invalid function name"),
   FUNCTION_NOT_CALLED("Function must be called"),
-  FUNCTION_REQUIRES_ARGUMENT("Function requires argument");
+  FUNCTION_REQUIRES_ARGUMENT("Function requires argument"),
+  EMPTY_EXPRESSION("Empty expression not allowed");
 
   private final String humanReadableMessage;
 

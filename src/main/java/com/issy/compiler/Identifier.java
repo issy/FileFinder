@@ -3,6 +3,7 @@ package com.issy.compiler;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public enum Identifier {
   HAS_FILE_EXTENSION("hasFileExtension", true),
@@ -30,7 +31,7 @@ public enum Identifier {
     return takesArgument;
   }
 
-  public FileMatcher implement() {
+  public Predicate<String> implement() {
     if (takesArgument) {
       throw new RuntimeException("This function should take an argument");
     }
@@ -40,7 +41,7 @@ public enum Identifier {
     };
   }
 
-  public FileMatcher implement(String arg) {
+  public Predicate<String> implement(String arg) {
     if (!takesArgument) {
       throw new RuntimeException("This function does not take an argument");
     }
